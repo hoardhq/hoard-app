@@ -11,10 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150727200328) do
+ActiveRecord::Schema.define(version: 20150727204248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "events", force: :cascade do |t|
+    t.integer  "stream_id"
+    t.jsonb    "data"
+    t.datetime "created_at"
+  end
+
+  add_index "events", ["stream_id"], name: "index_events_on_stream_id", using: :btree
 
   create_table "streams", force: :cascade do |t|
     t.string   "name",       limit: 32

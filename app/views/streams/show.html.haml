@@ -1,3 +1,15 @@
 .container-fluid
 
   %h2= @stream.name
+
+  %table.table
+    %thead
+      %th Data
+      %th.text-right{width: 100} Time
+    %body
+      - @stream.events.order(id: :desc).limit(25).each do |event|
+        %tr
+          %td
+            %code= event.data
+          %td.text-right
+            = time_ago_in_words event.created_at
