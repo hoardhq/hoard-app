@@ -1,0 +1,9 @@
+.navbar.navbar-fixed-top.navbar-default
+  .container-fluid
+    = link_to root_path, class: 'navbar-brand' do
+      Hoard
+    %ul.nav.navbar-nav
+      %li
+        = link_to streams_path do
+          Streams
+          (#{Stream.count})

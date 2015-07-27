@@ -7,6 +7,7 @@ gem 'bcrypt'
 gem 'haml-rails'
 gem 'jquery-rails'
 gem 'sass-rails'
+gem 'bootstrap-sass'
 
 group :development do
   gem 'byebug'
