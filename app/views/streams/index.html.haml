@@ -1,0 +1,18 @@
+.container-fluid
+
+  %table.table
+    %thead
+      %tr
+        %th.text-left Name
+        %th.text-center{width: 100} Events
+        %th.text-center{width: 100} Storage
+    %tbody
+      - @streams.each do |stream|
+        %tr
+          %td
+            = link_to stream_path(stream) do
+              = stream.name
+          %td.text-center
+            \-
+          %td.text-center
+            \-
