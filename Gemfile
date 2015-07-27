@@ -5,6 +5,7 @@ gem 'pg'
 
 gem 'bcrypt'
 gem 'haml-rails'
+gem 'jquery-rails'
 gem 'sass-rails'
 
 group :development do
