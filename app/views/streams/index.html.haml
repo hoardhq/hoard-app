@@ -13,6 +13,7 @@
             = link_to stream_path(stream) do
               = stream.name
           %td.text-center
-            = stream.events.count
+            = link_to events_path(stream: stream) do
+              = stream.events.count
           %td.text-center
             = number_to_human_size stream.events.sum('length(data::text)')
