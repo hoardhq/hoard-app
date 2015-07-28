@@ -6,4 +6,8 @@
       %li
         = link_to streams_path do
           Streams
-          (#{Stream.count})
+          (#{number_with_delimiter Stream.count})
+      %li
+        = link_to events_path do
+          Events
+          (#{number_with_delimiter Event.count})
