@@ -14,7 +14,14 @@ module HQL
 
     def to_sql
       return nil unless valid?
-      @pairs.sort_by { |k, v| k }.map { |field, value| "data->>'#{field}' = '#{value.gsub("\\", "").gsub("'", "''")}'" }.join(' AND ')
+      @pairs.sort_by { |k, v| k }.map do |field, value|
+        operator = "="
+        if value[0] == "~"
+          operator = "LIKE"
+          value[1] = "%#{value[1]}%"
+        end
+        "data->>'#{field}' #{operator} '#{value[1].gsub("\\", "").gsub("'", "''")}'"
+      end.join(' AND ')
     end
 
     private
@@ -22,14 +29,14 @@ module HQL
     def build
       @build ||= begin
         query_string = @query_string.dup
-        matches = query_string.scan(/(?<all>(?<field>[a-z]+)[ ]*\=[ ]*(?<quote>['"])(?<value>.*?)\k<quote>)/)
+        matches = query_string.scan(/(?<all>(?<field>[a-z]+)[ ]*(?<operator>(=|~))[ ]*(?<quote>['"])(?<value>.*?)\k<quote>)/)
         matches.each do |match|
-          @pairs[match[1]] = match[3] if match[3]
+          @pairs[match[1]] = [match[2], match[4]] if match[4]
           query_string.gsub! match[0], ''
         end
-        matches = query_string.scan(/(?<field>[a-z]+)[ ]*\=[ ]*(?<value>[^\s'"]+)/)
+        matches = query_string.scan(/(?<field>[a-z]+)[ ]*(?<operator>(=|~))[ ]*(?<value>[^\s'"]+)/)
         matches.each do |match|
-          @pairs[match[0]] = match[1] if match[1]
+          @pairs[match[0]] = [match[1], match[2]] if match[2]
         end
         true
       end

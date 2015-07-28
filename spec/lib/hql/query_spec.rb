@@ -38,6 +38,16 @@ describe HQL::Query do
       sql: "data->>'host' = 's7' AND data->>'path' = '/'",
       valid: true,
     },
+    {
+      query: "path ~ /users/1",
+      sql: "data->>'path' LIKE '%/users/1%'",
+      valid: true,
+    },
+    {
+      query: "path ~ \"/users/1\" host ~ 's1.'",
+      sql: "data->>'host' LIKE '%s1.%' AND data->>'path' LIKE '%/users/1%'",
+      valid: true,
+    },
   ]
 
   queries.each do |options|
