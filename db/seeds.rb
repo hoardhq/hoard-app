@@ -5,12 +5,13 @@ Stream.create(name: '/dev/null', slug: 'devnull')
 
 # Access Log Stream
 stream = Stream.create(name: 'Access Log', slug: 'accesslog')
-(1..100).each do |n|
+(1..1000).each do |n|
   stream.events.create(
     data: {
-      uuid: "#{n.to_s.ljust 4, '0'}-#{(rand * 10).ceil.to_s.ljust 8, '0'}",
+      uuid: "#{n.to_s.ljust 4, '0'}-#{(rand * 10000000).ceil.to_s.ljust 8, '0'}",
       host: "s#{(rand * 10).ceil}.example.org",
       path: "/users/#{(rand * 10000).ceil}",
+      status: [200, 301, 302, 404, 500, 503].sample,
     }
   )
 end
