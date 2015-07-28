@@ -21,9 +21,9 @@ module HQL
 
     def build
       @build ||= begin
-        match = @query_string.match(/([a-z]+) \= ['"]([^'"]+)['"]/)
-        if match
-          @pairs[match[1]] = match[2]
+        matches = @query_string.scan(/([a-z]+) \= ['"]([^'"]+)['"]/)
+        matches.each do |match|
+          @pairs[match[0]] = match[1]
         end
         true
       end

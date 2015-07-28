@@ -46,6 +46,26 @@ describe HQL::Query do
         end
       end
     end
+    context "with multiple conditions" do
+      context "in single quotes" do
+        subject { HQL::Query.new("host = 's1.example.org' path = '/test'").to_sql }
+        it do
+          expect(subject).to eq "data->>'host' = 's1.example.org' AND data->>'path' = '/test'"
+        end
+      end
+      context "in double quotes" do
+        subject { HQL::Query.new("host = \"s1.example.org\" path = \"/test\"").to_sql }
+        it do
+          expect(subject).to eq "data->>'host' = 's1.example.org' AND data->>'path' = '/test'"
+        end
+      end
+      context "where one is invalid" do
+        subject { HQL::Query.new("host = 's1.example.org' AND path = /test'").to_sql }
+        it do
+          expect(subject).to eq "data->>'host' = 's1.example.org'"
+        end
+      end
+    end
   end
 
 end
