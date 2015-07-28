@@ -22,7 +22,22 @@ describe HQL::Query do
       query: "host = 's1.example.org' path = '/test'",
       sql: "data->>'host' = 's1.example.org' AND data->>'path' = '/test'",
       valid: true,
-    }
+    },
+    {
+      query: "title = \"Hoard's Page\"",
+      sql: "data->>'title' = 'Hoard''s Page'",
+      valid: true,
+    },
+    {
+      query: "host = s1.example.org path='/test'",
+      sql: "data->>'host' = 's1.example.org' AND data->>'path' = '/test'",
+      valid: true,
+    },
+    {
+      query: "path=/ host = s7",
+      sql: "data->>'host' = 's7' AND data->>'path' = '/'",
+      valid: true,
+    },
   ]
 
   queries.each do |options|

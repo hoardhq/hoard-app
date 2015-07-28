@@ -14,16 +14,22 @@ module HQL
 
     def to_sql
       return nil unless valid?
-      @pairs.map { |field, value| "data->>'#{field}' = '#{value}'" }.join(' AND ')
+      @pairs.sort_by { |k, v| k }.map { |field, value| "data->>'#{field}' = '#{value.gsub("\\", "").gsub("'", "''")}'" }.join(' AND ')
     end
 
     private
 
     def build
       @build ||= begin
-        matches = @query_string.scan(/([a-z]+) \= ['"]([^'"]+)['"]/)
+        query_string = @query_string.dup
+        matches = query_string.scan(/(?<all>(?<field>[a-z]+)[ ]*\=[ ]*(?<quote>['"])(?<value>.*?)\k<quote>)/)
         matches.each do |match|
-          @pairs[match[0]] = match[1]
+          @pairs[match[1]] = match[3] if match[3]
+          query_string.gsub! match[0], ''
+        end
+        matches = query_string.scan(/(?<field>[a-z]+)[ ]*\=[ ]*(?<value>[^\s'"]+)/)
+        matches.each do |match|
+          @pairs[match[0]] = match[1] if match[1]
         end
         true
       end
