@@ -8,10 +8,9 @@ module HQL
 
     def to_sql
       match = @query_string.match(/([a-z]+) \= ['"]([^'"]+)['"]/)
+      return nil unless match
       pairs = {}
-      if match[1]
-        pairs[match[1]] = match[2]
-      end
+      pairs[match[1]] = match[2]
       pairs.map { |field, value| "data->>'#{field}' = '#{value}'" }.join(' AND ')
     end
 
