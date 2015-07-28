@@ -3,7 +3,8 @@
     = hidden_field_tag :stream, params[:stream]
     .row
       .col-sm-9
-        = text_field_tag :hql, params[:hql], placeholder: "e.g host = 'example.org' OR $time BETWEEN('2015-07-01', '2015-07-31')", class: 'form-control'
+        %div{class: "#{(@hql_query.valid? ? 'has-success' : 'has-error') if @hql_query}"}
+          = text_field_tag :hql, params[:hql], placeholder: "e.g host = 'example.org' OR $time BETWEEN('2015-07-01', '2015-07-31')", class: 'form-control'
       .col-sm-1
         = text_field_tag :offset, params[:offset], placeholder: 'Offset', class: 'form-control text-center'
       .col-sm-1
