@@ -1,0 +1,51 @@
+.container-fluid
+  .row
+
+    .col-sm-4
+      .panel.panel-default
+        .panel-heading
+          %h3.panel-title System Information
+        %table.table
+          %tbody
+            - @system_info.each do |key, value|
+              %tr
+                %th
+                  = key
+                %td.text-right
+                  - if value.is_a? Numeric
+                    = number_with_delimiter value
+                  - else
+                    = value
+
+      .panel.panel-default
+        .panel-heading
+          %h3.panel-title Database Information
+        %table.table
+          %tbody
+            - @db_info.each do |key, value|
+              %tr
+                %th
+                  = key
+                %td.text-right
+                  - if key.to_s.index('size') != nil
+                    = number_to_human_size value
+                  - elsif value.is_a? Numeric
+                    = number_with_delimiter value
+                  - else
+                    = value
+
+    .col-sm-8
+
+      .panel.panel-default
+        .panel-heading
+          %h3.panel-title Database Processes
+        .panel-body
+          - @db_processes.each do |row|
+            %p
+              - row.slice('pid', 'datname', 'usename', 'state').each do |key, value|
+                %strong= key.upcase
+                = value
+                &nbsp;
+                &nbsp;
+            %code= row['query']
+            %hr

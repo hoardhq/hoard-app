@@ -5,4 +5,6 @@ Rails.application.routes.draw do
   resources :events, only: [:index, :create]
   resources :streams, only: [:index, :show]
 
+  get 'system' => 'system#index'
+
 end
