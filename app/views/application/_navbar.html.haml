@@ -5,9 +5,11 @@
     %ul.nav.navbar-nav
       %li
         = link_to streams_path do
+          %span.fa.fa-database
           Streams
           (#{number_with_delimiter Stream.count})
       %li
         = link_to events_path do
+          %span.fa.fa-list
           Events
           (#{number_with_delimiter Event.count})
