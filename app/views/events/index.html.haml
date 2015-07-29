@@ -19,7 +19,7 @@
     %thead
       %tr
         - @columns.each do |column|
-          %th
+          %th.text-center
             = column
         %th{width: 150}
           &nbsp;
@@ -27,8 +27,12 @@
       - @events.each do |event|
         %tr
           - @columns.each do |column|
-            %td
-              = event.data[column]
+            %td.text-center
+              - if event.data[column]
+                = event.data[column]
+              - else
+                %span.text-muted
+                  \-
           %td.text-right
             %small.text-muted
               = event.created_at.strftime('%Y-%m-%d %H:%M')
