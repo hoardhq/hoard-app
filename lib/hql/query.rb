@@ -12,6 +12,10 @@ module HQL
       @pairs.length > 0
     end
 
+    def uuid
+      Digest::SHA1.hexdigest(canonical)[0..15] if canonical
+    end
+
     def to_sql
       return nil unless valid?
       @pairs.sort_by { |k, v| k }.map do |field, options|
