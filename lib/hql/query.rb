@@ -24,6 +24,15 @@ module HQL
       end.join(' AND ')
     end
 
+    def canonical
+      return nil unless valid?
+      filters = []
+      @pairs.sort_by { |k, v| k }.map do |field, value|
+        filters.push "#{field} #{value[0]} \"#{value[1].gsub("\"", "&quote;")}\""
+      end
+      filters.join(' ')
+    end
+
     private
 
     def build
