@@ -42,12 +42,12 @@ module HQL
     def build
       @build ||= begin
         query_string = @query_string.dup
-        matches = query_string.scan(/(?<all>(?<field>[a-z]+)[ ]*(?<operator>(=|~))[ ]*(?<quote>['"])(?<value>.*?)\k<quote>)/)
+        matches = query_string.scan(/(?<all>(?<field>[a-z0-9_-]+)[ ]*(?<operator>(=|~))[ ]*(?<quote>['"])(?<value>.*?)\k<quote>)/i)
         matches.each do |match|
           @pairs[match[1]] = [match[2], match[4]] if match[4]
           query_string.gsub! match[0], ''
         end
-        matches = query_string.scan(/(?<field>[a-z]+)[ ]*(?<operator>(=|~))[ ]*(?<value>[^\s'"]+)/)
+        matches = query_string.scan(/(?<field>[a-z0-9_-]+)[ ]*(?<operator>(=|~))[ ]*(?<value>[^\s'"]+)/i)
         matches.each do |match|
           @pairs[match[0]] = [match[1], match[2]] if match[2]
         end
