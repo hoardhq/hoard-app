@@ -14,13 +14,13 @@ module HQL
 
     def to_sql
       return nil unless valid?
-      @pairs.sort_by { |k, v| k }.map do |field, value|
+      @pairs.sort_by { |k, v| k }.map do |field, options|
         operator = "="
-        if value[0] == "~"
+        value = options[1]
+        if options[0] == "~"
           operator = "LIKE"
-          value[1] = "%#{value[1]}%"
         end
-        "data->>'#{field}' #{operator} '#{value[1].gsub("\\", "").gsub("'", "''")}'"
+        "data->>'#{field}' #{operator} '#{value.gsub("\\", "").gsub("'", "''")}'"
       end.join(' AND ')
     end
 
@@ -37,6 +37,9 @@ module HQL
         matches = query_string.scan(/(?<field>[a-z]+)[ ]*(?<operator>(=|~))[ ]*(?<value>[^\s'"]+)/)
         matches.each do |match|
           @pairs[match[0]] = [match[1], match[2]] if match[2]
+        end
+        @pairs.each do |field, options|
+          options[1] << "%" if options[0] === '~' && options[1].index('%') === nil
         end
         true
       end
