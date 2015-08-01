@@ -3,6 +3,7 @@ class EventsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :create
   skip_before_action :authenticate_user!, only: :create
 
+  before_action :authenticate_api_key!, only: :create
   around_action :track_results, only: :index
 
   def index

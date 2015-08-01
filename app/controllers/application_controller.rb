@@ -7,6 +7,12 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
 
+  def authenticate_api_key!
+    key = params[:api_key] || request.headers['x-api-key']
+    api_key = ApiKey.find_by(key: key)
+    render json: { error: 'Invalid API Key Specified' }, status: 401 unless api_key.present?
+  end
+
   def authenticate_user!
     if current_user.blank? && params[:controller] != 'sessions'
       flash[:error] = "You must sign in to do that"
