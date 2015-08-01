@@ -1,0 +1,12 @@
+!!!
+%html
+  %head
+    %meta{charset: 'utf-8'}
+    %title= yield(:content) || "Hoard"
+    = stylesheet_link_tag 'unauthenticated', media: 'all'
+    = csrf_meta_tags
+  %body.unauthenticated
+
+    .container
+      = render partial: 'flash'
+      = yield

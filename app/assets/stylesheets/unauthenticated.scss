@@ -1,0 +1,24 @@
+@import "bootstrap-sprockets";
+@import "variables";
+@import "bootstrap";
+@import "bootswatch";
+@import "font-awesome";
+
+body.unauthenticated {
+
+  background: #f7f7f7;
+  padding-top: $navbar-height * 2;
+
+  & > .container {
+    @include box-shadow(0 3px 5px #999);
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin: 0 auto;
+    padding: $grid-gutter-width;
+    width: auto;
+    width: 600px;
+
+  }
+
+}

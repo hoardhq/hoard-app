@@ -1,0 +1,19 @@
+= form_for @user, url: sessions_path do |f|
+
+  %h4 Login to Hoard
+  %hr
+
+  .input-group
+    %span.input-group-addon
+      %span.fa.fa-user
+    = f.text_field :email, class: 'form-control', placeholder: 'Email'
+
+  .input-group
+    %span.input-group-addon
+      %span.fa.fa-lock
+    = f.password_field :password, class: 'form-control', placeholder: 'Password'
+
+  %br
+  .text-right
+    = f.button type: 'submit', class: 'btn btn-primary' do
+      Login

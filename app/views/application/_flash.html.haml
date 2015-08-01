@@ -1,0 +1,4 @@
+- [:error, :success, :info, :warning].each do |type|
+  - if flash[type]
+    .alert.alert-block{class: "alert-#{type.to_s.gsub('error', 'danger')}"}
+      = flash[type]
