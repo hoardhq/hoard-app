@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150727204248) do
+ActiveRecord::Schema.define(version: 20150729200741) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,23 @@ ActiveRecord::Schema.define(version: 20150727204248) do
   end
 
   add_index "events", ["stream_id"], name: "index_events_on_stream_id", using: :btree
+
+  create_table "queries", force: :cascade do |t|
+    t.string   "uuid"
+    t.string   "raw"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "queries", ["uuid"], name: "index_queries_on_uuid", using: :btree
+
+  create_table "query_results", force: :cascade do |t|
+    t.integer  "query_id"
+    t.integer  "count"
+    t.integer  "elapsed"
+    t.integer  "stream_id"
+    t.datetime "created_at", null: false
+  end
 
   create_table "streams", force: :cascade do |t|
     t.string   "name",       limit: 32
