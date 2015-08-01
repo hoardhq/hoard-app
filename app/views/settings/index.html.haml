@@ -1,0 +1,40 @@
+.container-fluid
+  .row
+
+    .col-sm-6
+      .panel.panel-default
+        .panel-heading
+          %h3.panel-title API Keys
+        - if @api_keys.any?
+          %table.table
+            %tbody
+              - @api_keys.each do |api_key|
+                %tr
+                  %th
+                    - if api_key.name.present?
+                      = api_key.name
+                    - else
+                      %span.text-muted No name
+                  %td.text-right
+                    %small
+                      %code= api_key.key
+
+                  %td{width: 10}
+                    = form_tag api_key_path(api_key.key), class: 'form-horizontal', method: 'delete' do
+                      = button_tag type: 'submit', class: 'btn btn-link btn-xs' do
+                        %span.fa.fa-times.text-danger
+        - else
+          .text-muted.text-center
+            %br
+            %br
+            No API Keys.
+            %br
+            %br
+            %br
+        .panel-footer
+          = form_tag api_keys_path do
+            .input-group
+              = text_field_tag 'api_key[name]', '', placeholder: 'Application Name', class: 'form-control input-sm'
+              .input-group-btn
+                = button_tag type: 'submit', class: 'btn btn-sm btn-primary' do
+                  %span.fa.fa-plus
