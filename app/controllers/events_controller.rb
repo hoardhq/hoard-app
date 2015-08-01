@@ -30,11 +30,16 @@ class EventsController < ApplicationController
     end
     events = []
     payloads.each do |payload|
-      stream = Stream.select(:id).find_by(slug: payload.delete('stream'))
-      if stream.present?
-        payload['stream_id'] = stream.id
-        events.push Event.create(payload)
+      @stream = Stream.select(:id).find_by(slug: payload['stream'])
+      unless @stream.present?
+        @stream = Stream.create!(
+          slug: payload['stream'],
+          name: payload['stream'],
+        )
       end
+      payload.delete('stream')
+      payload['stream_id'] = @stream.id if @stream.present?
+      events.push Event.create(payload)
     end
     render json: events.to_json, status: 201
   end
