@@ -4,10 +4,7 @@ gem 'rails'
 gem 'pg'
 
 gem 'bcrypt'
-gem 'bootstrap-sass'
-gem 'font-awesome-rails'
 gem 'haml-rails'
-gem 'jquery-rails'
 gem 'puma'
 gem 'sass-rails'
 

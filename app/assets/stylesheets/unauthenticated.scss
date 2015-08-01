@@ -1,8 +1,8 @@
-@import "bootstrap-sprockets";
+@import "bootstrap-sass/assets/stylesheets/bootstrap-sprockets";
 @import "variables";
-@import "bootstrap";
+@import "bootstrap-sass/assets/stylesheets/bootstrap";
 @import "bootswatch";
-@import "font-awesome";
+@import "fontawesome/scss/font-awesome";
 
 body.unauthenticated {
 
