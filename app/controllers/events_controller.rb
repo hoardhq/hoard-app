@@ -28,9 +28,8 @@ class EventsController < ApplicationController
   def create
     payloads = JSON.parse request.raw_post
     payloads = [payloads] unless payloads.is_a? Array
-    events = []
-    payloads.each do |payload|
-      events.push Event.create(data: payload)
+    events = payloads.map do |payload|
+      Event.create(data: payload)
     end
     render json: events.to_json, status: 201
   end
