@@ -27,21 +27,10 @@ class EventsController < ApplicationController
 
   def create
     payloads = JSON.parse request.raw_post
-    unless payloads.is_a? Array
-      payloads = [payloads]
-    end
+    payloads = [payloads] unless payloads.is_a? Array
     events = []
     payloads.each do |payload|
-      @stream = Stream.select(:id).find_by(slug: payload['stream'])
-      unless @stream.present?
-        @stream = Stream.create!(
-          slug: payload['stream'],
-          name: payload['stream'],
-        )
-      end
-      payload.delete('stream')
-      payload['stream_id'] = @stream.id if @stream.present?
-      events.push Event.create(payload)
+      events.push Event.create(data: payload)
     end
     render json: events.to_json, status: 201
   end
