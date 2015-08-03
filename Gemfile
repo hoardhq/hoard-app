@@ -8,6 +8,8 @@ gem 'haml-rails'
 gem 'puma'
 gem 'sass-rails'
 
+gem 'curb', require: false
+
 group :development do
   gem 'byebug'
   gem 'web-console'
