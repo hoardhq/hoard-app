@@ -24,7 +24,7 @@ namespace :import do
             lines.each do |line|
               payload = JSON.parse(line.match(/\{.*\}/).to_s)
               payload['stream'] = args.stream
-              if payload['uuid'].blank? || Event.select(:uuid).find_by(uuid: payload['uuid']).nil?
+              if payload['uuid'].blank? || Event.select(:id).find_by(id: payload['uuid']).nil?
                 event_count += 1
                 Event.create(data: payload)
               end

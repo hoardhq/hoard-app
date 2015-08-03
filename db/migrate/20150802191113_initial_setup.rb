@@ -1,19 +1,19 @@
 class InitialSetup < ActiveRecord::Migration
   def change
+    enable_extension 'uuid-ossp'
+
     create_table :streams do |t|
       t.string :name, limit: 32
       t.string :slug, limit: 32
       t.timestamps null: false
     end
 
-    create_table :events do |t|
+    create_table :events, id: :uuid do |t|
       t.integer :stream_id
-      t.string :uuid
       t.jsonb :data
       t.datetime :created_at
     end
     add_index :events, :stream_id
-    add_index :events, :uuid, unique: true
 
     create_table :queries do |t|
       t.string :uuid

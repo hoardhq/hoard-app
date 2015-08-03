@@ -6,7 +6,7 @@ class Event < ActiveRecord::Base
 
   def normalize_data
     self.data = self.data.delete_if { |key, value| value != false && value.blank? }
-    self.uuid = self.data.delete('uuid') if data['uuid']
+    self.id = self.data.delete('uuid') if data['uuid']
     if data['stream']
       @stream = Stream.find_by(slug: data['stream'])
       if @stream.nil?

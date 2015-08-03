@@ -5,9 +5,10 @@ describe Event do
   describe "#normalize_data" do
 
     it "converts uuid correctly" do
-      event = Event.new(data: { 'field' => 'value', 'uuid' => 'test' }, uuid: nil)
+      uuid = SecureRandom.uuid
+      event = Event.new(data: { 'field' => 'value', 'uuid' => uuid })
       event.valid?
-      expect(event.uuid).to eq 'test'
+      expect(event.id).to eq uuid
       expect(event.data).to eq('field' => 'value')
     end
 

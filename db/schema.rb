@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20150802191113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "api_keys", force: :cascade do |t|
     t.string   "name"
@@ -25,15 +26,13 @@ ActiveRecord::Schema.define(version: 20150802191113) do
 
   add_index "api_keys", ["key"], name: "index_api_keys_on_key", unique: true, using: :btree
 
-  create_table "events", force: :cascade do |t|
+  create_table "events", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.integer  "stream_id"
-    t.string   "uuid"
     t.jsonb    "data"
     t.datetime "created_at"
   end
 
   add_index "events", ["stream_id"], name: "index_events_on_stream_id", using: :btree
-  add_index "events", ["uuid"], name: "index_events_on_uuid", unique: true, using: :btree
 
   create_table "queries", force: :cascade do |t|
     t.string   "uuid"
