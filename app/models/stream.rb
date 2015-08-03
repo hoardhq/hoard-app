@@ -1,7 +1,7 @@
 class Stream < ActiveRecord::Base
 
   validates :name, presence: true, length: 5..32
-  validates :slug, presence: true, length: 5..16
+  validates :slug, presence: true, length: 5..32
 
   has_many :events
   has_many :query_results

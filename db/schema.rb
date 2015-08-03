@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20150802191113) do
 
   create_table "streams", force: :cascade do |t|
     t.string   "name",       limit: 32
-    t.string   "slug",       limit: 16
+    t.string   "slug",       limit: 32
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
   end
