@@ -1,7 +1,10 @@
 Stream.destroy_all
+User.destroy_all
 
-Stream.create(name: 'Example #1', slug: 'example-1')
-Stream.create(name: '/dev/null', slug: 'devnull')
+User.create!(email: 'user@example.com', password: 'password')
+
+Stream.create!(name: 'Example #1', slug: 'example-1')
+Stream.create!(name: '/dev/null', slug: 'devnull')
 
 # Access Log Stream
 stream = Stream.create(name: 'Access Log', slug: 'accesslog')
