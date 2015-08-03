@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   def current_user
     @current_user ||= begin
       if session[:user_id]
-        user = User.find(session[:user_id])
+        user = User.find_by(id: session[:user_id])
         return nil unless user.present?
         session[:user_id]
       end
