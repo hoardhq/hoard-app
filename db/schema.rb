@@ -23,13 +23,13 @@ ActiveRecord::Schema.define(version: 20150802191113) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "api_keys", ["key"], name: "index_api_keys_on_key", using: :btree
+  add_index "api_keys", ["key"], name: "index_api_keys_on_key", unique: true, using: :btree
 
   create_table "events", force: :cascade do |t|
     t.integer  "stream_id"
+    t.string   "uuid"
     t.jsonb    "data"
     t.datetime "created_at"
-    t.string   "uuid"
   end
 
   add_index "events", ["stream_id"], name: "index_events_on_stream_id", using: :btree
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20150802191113) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "queries", ["uuid"], name: "index_queries_on_uuid", using: :btree
+  add_index "queries", ["uuid"], name: "index_queries_on_uuid", unique: true, using: :btree
 
   create_table "query_results", force: :cascade do |t|
     t.integer  "query_id"
