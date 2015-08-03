@@ -16,4 +16,4 @@
             = link_to events_path(stream: stream) do
               = number_with_delimiter(stream.events.count)
           %td.text-center
-            = number_to_human_size stream.events.sum('length(data::text)')
+            = number_to_human_size stream.events.sum('octet_length(events.*::text)')
