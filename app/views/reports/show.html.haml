@@ -1,0 +1,32 @@
+.container-fluid
+
+  %h4= @report.name
+
+  %p
+    %code { #{@report.filter} } GROUP(#{@report.group}) #{@report.function}
+  %br
+
+  - if @report.report_results.blank?
+    %br
+    %br
+    .text-info
+      This report has never been ran
+
+  - else
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Date
+          %th.text-center{width: 100} Count
+          %th.text-center{width: 100} Elapsed
+      %tbody
+        - @report.report_results.order(created_at: :desc).each do |report_result|
+          %tr
+            %td
+              = link_to report_result_path(@report, report_result) do
+                = report_result.created_at
+            %td.text-center
+              = number_with_delimiter report_result.count
+            %td.text-center
+              = number_with_precision report_result.elapsed / 1000.0, delimiter: ',', precision: 2
+              %span.text-muted ms

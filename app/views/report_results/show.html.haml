@@ -1,0 +1,30 @@
+.container-fluid
+
+  %h4= @report.name
+
+  %p
+    %code { #{@report.filter} } GROUP(#{@report.group}) #{@report.function}
+  %br
+
+  - if @report_result.results.blank?
+    %br
+    %br
+    .text-info
+      No results. Have you tried altering your filter?
+
+  - else
+    %table.table.table-striped
+      %thead
+        %tr
+          %th &nbsp;
+          %th{width: '2%'}
+          %th &nbsp;
+      %tbody
+        - @report_result.results.sort_by { |k, v| v }.reverse.each do |key, value|
+          %tr
+            %th
+              = key
+            %td
+              &nbsp;
+            %td
+              = number_with_delimiter value

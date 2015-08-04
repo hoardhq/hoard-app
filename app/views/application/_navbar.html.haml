@@ -11,6 +11,10 @@
         %span.fa.fa-list
         Events
         (#{number_with_delimiter Event.count})
+      = nav_link reports_path do
+        %span.fa.fa-area-chart
+        Reports
+        (#{number_with_delimiter Report.count})
     %ul.nav.navbar-nav.navbar-right
       = nav_link queries_path do
         %span.fa.fa-history

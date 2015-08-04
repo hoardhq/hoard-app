@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150802191113) do
+ActiveRecord::Schema.define(version: 20150803230200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,26 @@ ActiveRecord::Schema.define(version: 20150802191113) do
     t.integer  "elapsed"
     t.integer  "stream_id"
     t.datetime "created_at", null: false
+  end
+
+  create_table "report_results", force: :cascade do |t|
+    t.integer  "report_id"
+    t.jsonb    "results"
+    t.integer  "elapsed"
+    t.integer  "count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reports", force: :cascade do |t|
+    t.integer  "stream_id"
+    t.string   "name",       limit: 50
+    t.string   "filter"
+    t.string   "group"
+    t.string   "function"
+    t.string   "schedules",             default: [],              array: true
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
   end
 
   create_table "streams", force: :cascade do |t|

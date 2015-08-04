@@ -4,6 +4,11 @@ class Event < ActiveRecord::Base
 
   before_validation :normalize_data
 
+  def self.filter_by_hql(hql)
+    @hql_query = HQL::Query.new hql
+    self.where(@hql_query.to_sql) if @hql_query.valid?
+  end
+
   def normalize_data
     self.data = self.data.delete_if { |key, value| value != false && value.blank? }
     self.id = self.data.delete('uuid') if data['uuid']
