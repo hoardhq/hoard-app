@@ -8,21 +8,23 @@ class EventsController < ApplicationController
 
   def index
     @stream = Stream.find_by(slug: params[:stream])
-    @events = Event.all
-    @events = @events.where(stream_id: @stream.id) if @stream.present?
-    if params[:hql].present?
-      @hql_query = HQL::Query.new params[:hql]
-      @hql_query_record = Query.find_by(uuid: @hql_query.uuid)
-      if @hql_query_record.blank?
-        @hql_query_record = Query.create(
-          uuid: @hql_query.uuid,
-          raw: @hql_query.canonical,
-        )
+    if @stream.present?
+      @events = Event.all
+      @events = @events.where(stream_id: @stream.id) if @stream.present?
+      if params[:hql].present?
+        @hql_query = HQL::Query.new params[:hql]
+        @hql_query_record = Query.find_by(uuid: @hql_query.uuid)
+        if @hql_query_record.blank?
+          @hql_query_record = Query.create(
+            uuid: @hql_query.uuid,
+            raw: @hql_query.canonical,
+          )
+        end
+        @events = @events.where(@hql_query.to_sql) if @hql_query.valid?
       end
-      @events = @events.where(@hql_query.to_sql) if @hql_query.valid?
+      @events = @events.order(id: :desc).limit(params[:limit].presence || 25).offset(params[:offset].presence || 0)
+      @columns = @events.map { |row| row.data.keys }.flatten.uniq.sort
     end
-    @events = @events.order(id: :desc).limit(params[:limit].presence || 25).offset(params[:offset].presence || 0)
-    @columns = @events.map { |row| row.data.keys }.flatten.uniq.sort
   end
 
   def create

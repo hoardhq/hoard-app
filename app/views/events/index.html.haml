@@ -2,7 +2,9 @@
   = form_tag events_path, class: 'form-horizontal', method: 'GET' do
     = hidden_field_tag :stream, params[:stream]
     .row
-      .col-sm-10
+      .col-sm-2
+        = select_tag :stream, options_from_collection_for_select(Stream.all, 'slug', 'name', @stream.try(:slug)), include_blank: '-- Stream --', class: 'form-control', onchange: "$(this).closest('form').submit();"
+      .col-sm-8
         .input-group{class: "#{(@hql_query.valid? ? 'has-success' : 'has-error') if @hql_query}"}
           = text_field_tag :hql, params[:hql], placeholder: "HQL e.g. agent = 'Mozilla/5.0 (googlebot 1.0)' path ~ /settings", class: 'form-control', autocomplete: 'off'
           .input-group-btn
@@ -16,24 +18,35 @@
 
 %br
 .container-fluid
-  %table.table.table-striped
-    %thead
-      %tr
-        - @columns.each do |column|
-          %th.text-center
-            = column
-        %th{width: 150}
-          &nbsp;
-    %tbody
-      - @events.each do |event|
+  - if @stream.nil?
+    %br
+    .text-center.text-muted
+      Please select a stream to filter results
+
+  - elsif @events.count === 0
+    %br
+    .text-center.text-muted
+      No results for your filter
+
+  - else
+    %table.table.table-striped
+      %thead
         %tr
           - @columns.each do |column|
-            %td.text-center
-              - if event.data[column]
-                = event.data[column]
-              - else
-                %span.text-muted
-                  \-
-          %td.text-right
-            %small.text-muted
-              = event.created_at.strftime('%Y-%m-%d %H:%M')
+            %th.text-center
+              = column
+          %th{width: 150}
+            &nbsp;
+      %tbody
+        - @events.each do |event|
+          %tr
+            - @columns.each do |column|
+              %td.text-center
+                - if event.data[column]
+                  = event.data[column]
+                - else
+                  %span.text-muted
+                    \-
+            %td.text-right
+              %small.text-muted
+                = event.created_at.strftime('%Y-%m-%d %H:%M')
