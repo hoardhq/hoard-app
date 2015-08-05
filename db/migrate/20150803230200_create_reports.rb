@@ -11,6 +11,7 @@ class CreateReports < ActiveRecord::Migration
     end
     create_table :report_results do |t|
       t.integer :report_id
+      t.string :status, default: 'queued'
       t.jsonb :results
       t.integer :elapsed
       t.integer :count

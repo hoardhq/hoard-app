@@ -53,11 +53,12 @@ ActiveRecord::Schema.define(version: 20150803230200) do
 
   create_table "report_results", force: :cascade do |t|
     t.integer  "report_id"
+    t.string   "status",     default: "queued"
     t.jsonb    "results"
     t.integer  "elapsed"
     t.integer  "count"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
   end
 
   create_table "reports", force: :cascade do |t|
