@@ -39,14 +39,25 @@
             &nbsp;
       %tbody
         - @events.each do |event|
+    .table-responsive
+      %table.table.table-striped
+        %thead
           %tr
+            %th{width: 100}
+              Time
             - @columns.each do |column|
-              %td.text-center
-                - if event.data[column]
-                  = event.data[column]
-                - else
-                  %span.text-muted
-                    \-
-            %td.text-right
-              %small.text-muted
-                = event.created_at.strftime('%Y-%m-%d %H:%M')
+              %th.text-center
+                = column
+        %tbody
+          - @events.each do |event|
+            %tr
+              %td.text-right
+                %small.text-muted
+                  = event.created_at.strftime('%Y-%m-%d %H:%M')
+              - @columns.each do |column|
+                %td.text-center
+                  - if event.data[column]
+                    = event.data[column]
+                  - else
+                    %span.text-muted
+                      \-
