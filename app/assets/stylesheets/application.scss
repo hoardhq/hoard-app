@@ -4,3 +4,9 @@
 @import "bootswatch";
 @import "fontawesome/scss/font-awesome";
 @import "navbar";
+
+table.table > tbody > tr {
+  th, td {
+    vertical-align: middle;
+  }
+}
