@@ -1,0 +1,13 @@
+table.table > tbody > tr {
+  th, td {
+    vertical-align: middle;
+  }
+}
+
+.table-responsive {
+  table.table > tbody > tr {
+    td, th {
+      white-space: nowrap;
+    }
+  }
+}
