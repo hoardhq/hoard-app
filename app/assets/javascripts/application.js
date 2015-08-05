@@ -12,4 +12,5 @@
 //
 //= require jquery
 //= require jquery-ujs/src/rails
-//= require_tree .
+//= require d3/d3.min.js
+//= require_self

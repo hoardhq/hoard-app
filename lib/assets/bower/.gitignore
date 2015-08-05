@@ -4,7 +4,9 @@ fontawesome/less/*
 jquery/src/*
 */bower.json
 */.bower.json
+*/.gitattributes
 */.gitignore
 */*.txt
 */*.md
 */.npmignore
+*/LICENSE
