@@ -3,7 +3,14 @@
   %h4= @report.name
 
   %p
-    %code { #{@report.filter} } GROUP(#{@report.group}) #{@report.function}
+    %code
+      { #{@report.filter.present? ? @report.filter : "<span class='text-muted'>no filter</span>".html_safe } }
+    &nbsp;
+    %code
+      GROUP(#{@report.group})
+    &nbsp;
+    %code
+      #{@report.function}
 
   %p
     = link_to new_report_result_path(@report) do

@@ -22,7 +22,14 @@
               = link_to report_path(report) do
                 = report.name
               %br
-              %code { #{report.filter} } GROUP(#{report.group}) #{report.function}
+              %code
+                { #{report.filter.present? ? report.filter : "<span class='text-muted'>no filter</span>".html_safe } }
+              &nbsp;
+              %code
+                GROUP(#{report.group})
+              &nbsp;
+              %code
+                #{report.function}
             %td.text-center
               - if report.report_results.last.nil?
                 %span.text-muted Never
