@@ -12,7 +12,7 @@
             .col-sm-5
               .input-group
                 %span.input-group-addon Stream
-                = f.select :stream_id, options_from_collection_for_select(Stream.all, 'id', 'name'), {}, class: 'form-control'
+                = f.select :stream_id, options_from_collection_for_select(Stream.all, 'id', 'name'), { include_blank: '-- All Streams --' }, { class: 'form-control' }
 
           %br
           .input-group
@@ -24,11 +24,11 @@
             .col-sm-6
               .input-group
                 %span.input-group-addon Group
-                = f.text_field :group, class: 'form-control', placeholder: 'e.g. agent'
+                = f.text_field :group, class: 'form-control', placeholder: 'e.g. path'
             .col-sm-6
               .input-group
                 %span.input-group-addon Function
-                = f.select :stream_id, ['count(*)'], {}, class: 'form-control'
+                = f.select :function, ['count(*)'], {}, class: 'form-control'
 
           %br
           %br
