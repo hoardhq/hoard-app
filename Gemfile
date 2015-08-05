@@ -7,6 +7,7 @@ gem 'bcrypt'
 gem 'haml-rails'
 gem 'puma'
 gem 'sass-rails'
+gem 'sidekiq'
 
 gem 'curb', require: false
 
