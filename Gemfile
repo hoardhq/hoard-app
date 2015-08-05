@@ -4,6 +4,7 @@ gem 'rails'
 gem 'pg'
 
 gem 'bcrypt'
+gem 'groupdate'
 gem 'haml-rails'
 gem 'puma'
 gem 'sass-rails'
