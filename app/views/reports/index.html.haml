@@ -9,6 +9,13 @@
         Create one now
 
   - else
+    .clearfix
+      .pull-left
+        %h4 Reports
+      .pull-right
+        = link_to new_report_path, class: 'btn btn-primary' do
+          Create new report
+    %br
     %table.table
       %thead
         %tr
