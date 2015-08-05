@@ -1,0 +1,23 @@
+#chart-event-trend {
+  @include box-shadow(inset 0px 0px 5px #999);
+  background: #f7f7f7;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  height: 150px;
+}
+
+.chart {
+  svg {
+    border: none;
+  }
+
+  .axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .area { fill: #4ca3bd; }
+
+}
+

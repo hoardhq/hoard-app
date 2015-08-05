@@ -29,16 +29,8 @@
       No results for your filter
 
   - else
-    %table.table.table-striped
-      %thead
-        %tr
-          - @columns.each do |column|
-            %th.text-center
-              = column
-          %th{width: 150}
-            &nbsp;
-      %tbody
-        - @events.each do |event|
+    #chart-event-trend.chart
+    %br
     .table-responsive
       %table.table.table-striped
         %thead
@@ -61,3 +53,9 @@
                   - else
                     %span.text-muted
                       \-
+
+- if @events.present?
+  :javascript
+    $(document).on('ready', function () {
+      Hoard.renderAreaChart('#chart-event-trend', #{@events.except(:order, :limit, :offset).group_by_hour(:created_at).count.to_json});
+    });
