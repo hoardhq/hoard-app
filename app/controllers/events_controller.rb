@@ -7,6 +7,7 @@ class EventsController < ApplicationController
   around_action :track_results, only: :index
 
   def index
+    time_start = Time.now
     @stream = Stream.find_by(slug: params[:stream])
     if @stream.present?
       @events = Event.all
@@ -25,6 +26,7 @@ class EventsController < ApplicationController
       @events = @events.order(created_at: :desc).limit(params[:limit].presence || 25).offset(params[:offset].presence || 0)
       @columns = @events.map { |row| row.data.keys }.flatten.uniq.sort
     end
+    @elapsed = Time.now - time_start
   end
 
   def create

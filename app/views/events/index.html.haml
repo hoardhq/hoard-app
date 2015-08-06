@@ -36,6 +36,16 @@
       No results for your filter
 
   - else
+    .clearfix
+      .pull-left
+        Found
+        %strong
+          = number_with_delimiter @events.except(:limit, :offset, :order).count
+        events in
+        %strong
+          = number_with_precision @elapsed * 1000, precision: 2
+          ms
+    %hr
     .table-responsive
       %table.table.table-striped
         %thead
