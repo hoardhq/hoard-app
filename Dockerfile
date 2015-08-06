@@ -10,6 +10,7 @@ WORKDIR /app
 ADD Gemfile* /app/
 RUN bundle install --without development test
 ADD . /app/
+RUN rake assets:precompile
 
 EXPOSE 8090
 CMD ["bundle", "exec", "puma", "-t", "8:8", "-w", "1", "-e", "production", "-p", "8090"]
