@@ -2,7 +2,7 @@
 namespace :import do
 
   def uuid_from_payload_checksum(payload)
-    checksum = Digest::MD5.hexdigest payload.delete('uuid')
+    checksum = Digest::MD5.hexdigest payload.sort_by { |k, v| k }.to_json
     "#{checksum[0..8]}-#{checksum[8..12]}-#{checksum[12..16]}-#{checksum[16..20]}-#{checksum[20..32]}"
   end
 
