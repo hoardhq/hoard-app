@@ -16,8 +16,8 @@ Hoard.renderAreaChart = function (containerSelector, rawData) {
   var container = $(containerSelector);
 
   var margin = {
-    top: 20,
-    right: 20,
+    top: 30,
+    right: 0,
     bottom: 30,
     left: 50
   };
@@ -38,6 +38,7 @@ Hoard.renderAreaChart = function (containerSelector, rawData) {
 
   var yAxis = d3.svg.axis()
     .scale(y)
+    .ticks(5)
     .orient("left");
 
   var area = d3.svg.area()
@@ -72,11 +73,11 @@ Hoard.renderAreaChart = function (containerSelector, rawData) {
   svg.append("g")
     .attr("class", "y axis")
     .call(yAxis)
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 1)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("Count");
+    // .append("text")
+    // .attr("transform", "rotate(-90)")
+    // .attr("y", 1)
+    // .attr("dy", ".71em")
+    // .style("text-anchor", "end")
+    // .text("Count");
 
 };

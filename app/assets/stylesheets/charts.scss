@@ -1,9 +1,11 @@
 #chart-event-trend {
   @include box-shadow(inset 0px 0px 5px #999);
   background: #f7f7f7;
-  border: 1px solid #e5e5e5;
-  border-radius: 6px;
+  border-color: #e5e5e5;
+  border-style: solid;
+  border-width: 0px 0px;
   height: 150px;
+  padding: 0;
 }
 
 .chart {

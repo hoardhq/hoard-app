@@ -1,36 +1,41 @@
-.container-fluid
-  = form_tag events_path, class: 'form-horizontal', method: 'GET' do
-    = hidden_field_tag :stream, params[:stream]
-    .row
-      .col-sm-2
-        = select_tag :stream, options_from_collection_for_select(Stream.all, 'slug', 'name', @stream.try(:slug)), include_blank: '-- Stream --', class: 'form-control', onchange: "$(this).closest('form').submit();"
-      .col-sm-8
-        .input-group{class: "#{(@hql_query.valid? ? 'has-success' : 'has-error') if @hql_query}"}
-          = text_field_tag :hql, params[:hql], placeholder: "HQL e.g. agent = 'Mozilla/5.0 (googlebot 1.0)' path ~ /settings", class: 'form-control', autocomplete: 'off'
-          .input-group-btn
-            = button_tag type: 'submit', class: 'btn btn-block btn-primary', name: nil do
-              %span.fa.fa-search
-      .col-sm-1
-        = text_field_tag :offset, params[:offset], placeholder: 'Offset', class: 'form-control text-center'
-      .col-sm-1
-        = text_field_tag :limit, params[:limit], placeholder: 'Limit', class: 'form-control text-center'
-      .col-sm-1
+= form_tag events_path, class: 'form-horizontal events-form', method: 'GET' do
+  = hidden_field_tag :stream, params[:stream]
+  .row
+    .col-sm-2
+      = select_tag :stream, options_from_collection_for_select(Stream.all, 'slug', 'name', @stream.try(:slug)), include_blank: '-- Stream --', class: 'form-control', onchange: "$(this).closest('form').submit();"
+    .col-sm-8
+      .input-group{class: "#{(@hql_query.valid? ? 'has-success' : 'has-error') if @hql_query}"}
+        = text_field_tag :hql, params[:hql], placeholder: "HQL e.g. agent = 'Mozilla/5.0 (googlebot 1.0)' path ~ /settings", class: 'form-control', autocomplete: 'off'
+        .input-group-btn
+          = button_tag type: 'submit', class: 'btn btn-block btn-primary', name: nil do
+            %span.fa.fa-search
+    .col-sm-1
+      = text_field_tag :offset, params[:offset], placeholder: 'Offset', class: 'form-control text-center'
+    .col-sm-1
+      = text_field_tag :limit, params[:limit], placeholder: 'Limit', class: 'form-control text-center'
+    .col-sm-1
 
-%br
+
+- if @events.present?
+  #chart-event-trend.chart
+  %br
+
 .container-fluid
   - if @stream.nil?
+    %br
+    %br
     %br
     .text-center.text-muted
       Please select a stream to filter results
 
   - elsif @events.count === 0
     %br
+    %br
+    %br
     .text-center.text-muted
       No results for your filter
 
   - else
-    #chart-event-trend.chart
-    %br
     .table-responsive
       %table.table.table-striped
         %thead
@@ -57,4 +62,5 @@
 - if @events.present?
   :javascript
     $(document).on('ready', function () {
+      Hoard.renderAreaChart('#chart-event-trend', #{@events.except(:order, :limit, :offset).group_by_hour(:created_at, range: 7.days.ago..DateTime.now).count.to_json});
     });
