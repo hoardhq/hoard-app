@@ -16,6 +16,14 @@ staging:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
 
+<% if ENV['DB_PORT_5432_TCP_ADDR'].present? %>
+production:
+  <<: *default
+  host: <%= ENV['DB_PORT_5432_TCP_ADDR'] %>
+  username: postgres
+  password: postgres
+<% else %>
 production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
+<% end %>
