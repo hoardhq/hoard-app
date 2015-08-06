@@ -57,5 +57,5 @@
 - if @events.present?
   :javascript
     $(document).on('ready', function () {
-      Hoard.renderAreaChart('#chart-event-trend', #{@events.except(:order, :limit, :offset).group_by_hour(:created_at).count.to_json});
+      Hoard.renderAreaChart('#chart-event-trend', #{@events.except(:order, :limit, :offset).where('created_at BETWEEN ? AND ?', 1.week.ago, DateTime.now).group_by_hour(:created_at).count.to_json});
     });
