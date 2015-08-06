@@ -1,11 +1,3 @@
-$fa-font-path: "fontawesome/fonts";
-
-@import "bootstrap-sass/assets/stylesheets/bootstrap-sprockets";
-@import "variables";
-@import "bootstrap-sass/assets/stylesheets/bootstrap";
-@import "bootswatch";
-@import "fontawesome/scss/font-awesome";
-
 body.unauthenticated {
 
   background: #f7f7f7;
@@ -20,7 +12,9 @@ body.unauthenticated {
     padding: $grid-gutter-width;
     width: auto;
     width: 600px;
-
   }
 
+  .form-control {
+    padding-left: 6px;
+  }
 }
