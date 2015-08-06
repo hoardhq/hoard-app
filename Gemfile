@@ -21,3 +21,8 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'spring'
 end
+
+group :production do
+  gem 'rails_12factor'
+  gem 'uglifier'
+end
