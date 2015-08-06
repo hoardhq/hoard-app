@@ -2,11 +2,15 @@ class SystemController < ApplicationController
 
   def index
     @system_info = {
+      environment: Rails.env,
       ruby_version: RUBY_VERSION,
       hostname: `hostname`,
       server_time: `date`,
     }
     @db_info = {
+      hostname: Rails.configuration.database_configuration[Rails.env]['host'],
+      database: Rails.configuration.database_configuration[Rails.env]['database'],
+      username: Rails.configuration.database_configuration[Rails.env]['username'],
       server_version: ActiveRecord::Base.connection.execute("SHOW server_version")[0]['server_version'],
       client_version: PG::VERSION,
       total_rows: ActiveRecord::Base.connection.execute("SELECT schemaname,relname,n_live_tup FROM pg_stat_user_tables ORDER BY n_live_tup DESC").sum { |row| row['n_live_tup'].to_i },
