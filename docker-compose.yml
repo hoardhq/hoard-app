@@ -1,0 +1,28 @@
+web:
+  build: .
+  command: bundle exec puma -t 8:8 -w 1 -e production -p 8090
+  env_file: .env
+  environment:
+  - RAILS_ENV=production
+  ports:
+  - "8090:8090"
+  links:
+  - redis
+  - db
+job:
+  build: .
+  command: bundle exec sidekiq -c 1
+  env_file: .env
+  environment:
+  - RAILS_ENV=production
+  links:
+  - redis
+  - db
+redis:
+  image: redis
+  ports:
+  - "6379"
+db:
+  image: postgres
+  ports:
+  - "5432"
