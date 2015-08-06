@@ -1,6 +1,11 @@
 
 namespace :import do
 
+  def uuid_from_payload_checksum(payload)
+    checksum = Digest::MD5.hexdigest payload.delete('uuid')
+    "#{checksum[0..8]}-#{checksum[8..12]}-#{checksum[12..16]}-#{checksum[16..20]}-#{checksum[20..32]}"
+  end
+
   desc "Import Logentries Data"
   task :logentries, [:account_key, :log_set_name, :log_name, :filter, :stream] => :environment do |t, args|
     require 'curb'
@@ -24,6 +29,7 @@ namespace :import do
             lines.each do |line|
               payload = JSON.parse(line.match(/\{.*\}/).to_s)
               payload['stream'] = args.stream
+              payload['uuid'] = uuid_from_payload_checksum(payload)
               if payload['uuid'].blank? || Event.select(:id).find_by(id: payload['uuid']).nil?
                 event_count += 1
                 Event.create(data: payload)
