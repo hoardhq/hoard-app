@@ -5,7 +5,17 @@ RUN apt-get update \
  && apt-get install -y build-essential libcurl4-openssl-dev libpq-dev libxml2-dev nodejs
 RUN gem update --system \
  && gem update \
- && gem install bcrypt curb groupdate haml-rails nokogiri pg puma rails sass-rails sidekiq
+ && gem install bcrypt \
+    curb clockwork codecov \
+    derailed \
+    groupdate \
+    haml-rails \
+    interactor \
+    nokogiri \
+    pg puma \
+    rails rails_12factor \
+    sass-rails sidekiq \
+    uglifier
 
 ENV RAILS_ENV production
 WORKDIR /app
