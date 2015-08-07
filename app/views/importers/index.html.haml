@@ -1,0 +1,60 @@
+.container-fluid
+
+  %br
+  = form_for Importer.new do |f|
+
+    .row
+      .col-md-2
+        = f.select :stream_id, options_from_collection_for_select(Stream.all, 'id', 'name', @stream.try(:slug)), { include_blank: '-- Stream --' }, class: 'form-control'
+      .col-md-2
+        = f.select :provider, options_for_select("Log Entries" => "logentries"), {}, class: 'form-control'
+      .col-md-5
+        = f.text_field :endpoint, class: 'form-control', placeholder: 'Endpoint / URL'
+      .col-md-2
+        = f.select :schedule, options_for_select("Every minute" => 60, "Every 30 minutes" => 1800, "Every hour" => 3600, "Every 6 hours" => 21600, "Every day" => 86400), {}, class: 'form-control'
+      .col-md-1
+        = f.button type: 'submit', class: 'btn btn-primary' do
+          Create
+
+  %br
+
+  - if @importers.any?
+    %table.table
+      %thead
+        %tr
+          %th.text{width: 80} Provider
+          %th.text-center{width: 200} Stream
+          %th Endpoint
+          %th{width: 150}
+          %th{width: 10}
+      %tbody
+        - @importers.each do |importer|
+          %tr
+            %td
+              = importer.provider
+            %td.text-center
+              = importer.stream.name
+            %td
+              = text_field_tag :endpoint, importer.endpoint, class: 'form-control'
+            %td
+              - if importer.active?
+                %span.text-success
+                  %span.fa.fa-fw.fa-clock-o
+                  Every #{time_ago_in_words(Time.now - importer.schedule).gsub('about ', '')}
+              - else
+                %span.text-muted
+                  %span.fa.fa-fw.fa-clock-o
+                  Inactive
+            %td
+              = form_tag importer_path(importer), class: 'form-horizontal', method: 'delete' do
+                = button_tag type: 'submit', class: 'btn btn-link btn-xs' do
+                  %span.fa.fa-times.text-danger
+
+
+  - else
+    .text-center.text-muted
+      %br
+      %br
+      No importers registered
+
+

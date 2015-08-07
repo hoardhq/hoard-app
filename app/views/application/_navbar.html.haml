@@ -16,6 +16,8 @@
         Reports
         (#{number_with_delimiter Report.count})
     %ul.nav.navbar-nav.navbar-right
+      = nav_link importers_path do
+        %span.fa.fa-fw.fa-cloud-download
       = nav_link queries_path do
         %span.fa.fa-fw.fa-history
       = nav_link system_path do
