@@ -5,11 +5,11 @@
 
     .row
       .col-md-2
-        = f.select :stream_id, options_from_collection_for_select(Stream.all, 'id', 'name', @stream.try(:slug)), { include_blank: '-- Stream --' }, class: 'form-control'
+        = f.select :stream_id, options_from_collection_for_select(Stream.all, 'id', 'name', @stream.try(:slug)), { include_blank: '-- Stream --' }, class: 'form-control', required: true
       .col-md-2
-        = f.select :provider, options_for_select("Log Entries" => "logentries"), {}, class: 'form-control'
+        = f.select :provider, options_for_select("Log Entries" => "logentries"), { include_blank: '-- Provider --' }, class: 'form-control', required: true
       .col-md-5
-        = f.text_field :endpoint, class: 'form-control', placeholder: 'Endpoint / URL'
+        = f.text_field :endpoint, class: 'form-control', placeholder: 'Endpoint / URL', required: true
       .col-md-2
         = f.select :schedule, options_for_select("Every minute" => 60, "Every 30 minutes" => 1800, "Every hour" => 3600, "Every 6 hours" => 21600, "Every day" => 86400), {}, class: 'form-control'
       .col-md-1
