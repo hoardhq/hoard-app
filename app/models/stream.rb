@@ -4,6 +4,7 @@ class Stream < ActiveRecord::Base
   validates :slug, presence: true, length: 5..32
 
   has_many :events
+  has_many :importers
   has_many :query_results
   has_many :queries, through: :query_results
 

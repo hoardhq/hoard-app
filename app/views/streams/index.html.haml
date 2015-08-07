@@ -4,6 +4,7 @@
     %thead
       %tr
         %th.text-left Name
+        %th{width: 60}
         %th.text-center{width: 100} Events
     %tbody
       - @streams.each do |stream|
@@ -11,6 +12,11 @@
           %td
             = link_to stream_path(stream) do
               = stream.name
+          %td.text-center
+            - if stream.importers.count > 0
+              = link_to importers_path, class: 'text-success' do
+                %span.fa.fa-fw.fa-cloud-download
+                = stream.importers.size
           %td.text-center
             = link_to events_path(stream: stream) do
               = number_with_delimiter(stream.events.count)
