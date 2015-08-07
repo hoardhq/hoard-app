@@ -1,31 +1,29 @@
-namespace :import do
+class Import::LogEntriesJob < ActiveJob::Base
 
-  def uuid_from_payload_checksum(payload)
-    checksum = Digest::MD5.hexdigest payload.sort_by { |k, v| k }.to_json
-    "#{checksum[0..7]}-#{checksum[8..11]}-#{checksum[12..15]}-#{checksum[16..19]}-#{checksum[20..31]}"
-  end
-
-  desc "Import Logentries Data"
-  task :logentries, [:account_key, :log_set_name, :log_name, :filter, :stream, :days_to_import] => :environment do |t, args|
-    args.with_defaults(
-      days_to_import: 7,
-    )
+  def perform(importer)
     require 'curb'
-    hour_step = 6
-    filter_pair = args.filter.present? ? "&filter=#{args.filter}" : ""
+    hour_step = 2
     date = DateTime.now.end_of_day
-    date_final = date - args.days_to_import.to_i.days
+    date_final = date - importer.schedule.seconds
     while date > date_final
       puts ""
       puts "#{date}"
-      hour = 18
+      hour = 24 - hour_step
       while hour >= 0 do
         hour_start = date.change(hour: hour)
         hour_end = hour_start + hour_step.hours + 1.second
+        return if hour_end <= date_final
         hour -= hour_step
-        print "  #{hour_start.strftime('%H:00')} to #{hour_end.strftime('%H:00')}"
-        uri = "http://pull.logentries.com/#{args.account_key}/hosts/#{args.log_set_name}/#{args.log_name}/?start=#{hour_start.to_i * 1000}&end=#{hour_end.to_i * 1000}#{filter_pair}"
+        print "  #{hour_start} to #{hour_end}"
+        uri = importer.endpoint.gsub('{date:start}', (hour_start.to_i * 1000).to_s).gsub('{date:end}', (hour_end.to_i * 1000).to_s)
         http = Curl.get uri
+        if http.body_str.index('{') === 0
+          json = JSON.parse(http.body_str)['']
+          if json['response'] == 'error'
+            puts "  ERROR: #{json['reason']}"
+            next
+          end
+        end
         lines = http.body_str.split("\n")
         event_count = 0
         print "  #{lines.count.to_s.ljust 6}"
@@ -33,7 +31,7 @@ namespace :import do
         payload = nil
         lines.each do |line|
           payload = JSON.parse(line.match(/\{.*\}/).to_s)
-          payload['stream'] = args.stream
+          payload['stream'] = importer.stream.slug
           payload['uuid'] = uuid_from_payload_checksum(payload)
           uuids[payload['uuid']] = payload
         end
@@ -51,6 +49,14 @@ namespace :import do
       end
       date -= 1.day
     end
+
+  end
+
+  private
+
+  def uuid_from_payload_checksum(payload)
+    checksum = Digest::MD5.hexdigest payload.sort_by { |k, v| k }.to_json
+    "#{checksum[0..7]}-#{checksum[8..11]}-#{checksum[12..15]}-#{checksum[16..19]}-#{checksum[20..31]}"
   end
 
 end
