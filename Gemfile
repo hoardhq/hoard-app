@@ -14,6 +14,7 @@ gem 'curb', require: false
 
 group :development do
   gem 'byebug'
+  gem 'derailed'
   gem 'web-console'
 end
 
