@@ -4,6 +4,7 @@ gem 'rails'
 gem 'pg'
 
 gem 'bcrypt'
+gem 'clockwork'
 gem 'groupdate'
 gem 'haml-rails'
 gem 'interactor'

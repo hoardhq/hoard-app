@@ -46,6 +46,9 @@ GEM
       columnize (= 0.9.0)
     celluloid (0.16.0)
       timers (~> 4.0.0)
+    clockwork (1.2.0)
+      activesupport
+      tzinfo
     codecov (0.1.0)
       json
       simplecov
@@ -204,6 +207,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt
   byebug
+  clockwork
   codecov
   curb
   derailed
