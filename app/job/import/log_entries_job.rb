@@ -3,7 +3,7 @@ class Import::LogEntriesJob < ActiveJob::Base
   def perform(importer)
     require 'curb'
     hour_step = 2
-    date = DateTime.now.end_of_day
+    date = DateTime.now
     date_final = date - importer.schedule.seconds
     while date > date_final
       puts ""
@@ -14,6 +14,7 @@ class Import::LogEntriesJob < ActiveJob::Base
         hour_end = hour_start + hour_step.hours + 1.second
         return if hour_end <= date_final
         hour -= hour_step
+        next if hour_start > DateTime.now
         print "  #{hour_start} to #{hour_end}"
         uri = importer.endpoint.gsub('{date:start}', (hour_start.to_i * 1000).to_s).gsub('{date:end}', (hour_end.to_i * 1000).to_s)
         http = Curl.get uri
