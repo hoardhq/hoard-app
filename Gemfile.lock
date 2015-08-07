@@ -86,6 +86,7 @@ GEM
       nokogiri (~> 1.6.0)
       ruby_parser (~> 3.5)
     i18n (0.7.0)
+    interactor (3.1.0)
     json (1.8.3)
     loofah (2.0.2)
       nokogiri (>= 1.5.9)
@@ -208,6 +209,7 @@ DEPENDENCIES
   derailed
   groupdate
   haml-rails
+  interactor
   pg
   puma
   rails
