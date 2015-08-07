@@ -23,6 +23,10 @@ group :development, :test do
   gem 'spring'
 end
 
+group :test do
+  gem 'codecov', require: false
+end
+
 group :production do
   gem 'rails_12factor'
   gem 'uglifier'
