@@ -11,3 +11,9 @@ $fa-font-path: "fontawesome/fonts";
 
 @import "modules/unauthenticated";
 @import "modules/events";
+
+.input-group {
+  .form-control {
+    padding-left: 12px;
+  }
+}
