@@ -4,7 +4,11 @@ Rails.application.routes.draw do
 
   resources :api_keys, only: [:create, :destroy]
   resources :events, only: [:index, :create]
-  resources :importers, only: [:create, :index, :show, :destroy]
+  resources :importers, only: [:create, :index, :show, :destroy] do
+    member do
+      get 'run'
+    end
+  end
   resources :queries, only: [:index]
   resources :reports, only: [:new, :create, :index, :show] do
     resources :report_results, only: [:new, :show], path: 'results', as: :result

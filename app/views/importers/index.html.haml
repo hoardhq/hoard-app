@@ -26,6 +26,7 @@
           %th.text-center{width: 200} Stream
           %th Endpoint
           %th{width: 150}
+          %th{width: 60}
           %th{width: 10}
       %tbody
         - @importers.includes(:stream).each do |importer|
@@ -46,6 +47,10 @@
                 %span.text-muted
                   %span.fa.fa-fw.fa-clock-o
                   Inactive
+            %td
+              = link_to run_importer_path(importer) do
+                %span.fa.fa-fw.fa-terminal
+                run
             %td
               = form_tag importer_path(importer), class: 'form-horizontal', method: 'delete' do
                 = button_tag type: 'submit', class: 'btn btn-link btn-xs' do

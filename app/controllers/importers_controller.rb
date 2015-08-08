@@ -24,4 +24,13 @@ class ImportersController < ApplicationController
     redirect_to importers_path
   end
 
+  def run
+    @importer = Importer.find(params[:id])
+    if @importer.provider == 'logentries'
+      Import::LogEntriesJob.perform_later(@importer)
+    end
+    flash[:success] = "Your import has been scheduled"
+    redirect_to importers_path
+  end
+
 end
