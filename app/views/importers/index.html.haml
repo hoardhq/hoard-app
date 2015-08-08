@@ -45,8 +45,8 @@
                   Every #{time_ago_in_words(Time.now - importer.schedule).gsub('about ', '')}
               - else
                 %span.text-muted
-                  %span.fa.fa-fw.fa-clock-o
-                  Inactive
+                  %span.fa.fa-fw.fa-pause
+                  Every #{time_ago_in_words(Time.now - importer.schedule).gsub('about ', '')}
             %td
               = link_to run_importer_path(importer) do
                 %span.fa.fa-fw.fa-terminal
