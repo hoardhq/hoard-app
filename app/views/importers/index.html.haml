@@ -28,7 +28,7 @@
           %th{width: 150}
           %th{width: 10}
       %tbody
-        - @importers.each do |importer|
+        - @importers.includes(:stream).each do |importer|
           %tr
             %td
               = importer.provider
