@@ -11,7 +11,7 @@
       .col-md-5
         = f.text_field :endpoint, class: 'form-control', placeholder: 'Endpoint / URL', required: true
       .col-md-2
-        = f.select :schedule, options_for_select("Every minute" => 60, "Every 30 minutes" => 1800, "Every hour" => 3600, "Every 6 hours" => 21600, "Every day" => 86400), {}, class: 'form-control'
+        = f.select :schedule, options_for_select(schedule_periods), {}, class: 'form-control'
       .col-md-1
         = f.button type: 'submit', class: 'btn btn-primary' do
           Create
