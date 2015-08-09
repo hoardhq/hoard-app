@@ -55,7 +55,6 @@ GEM
       url
     columnize (0.9.0)
     connection_pool (2.2.0)
-    curb (0.8.8)
     debug_inspector (0.0.2)
     derailed (0.1.0)
       derailed_benchmarks
@@ -209,7 +208,6 @@ DEPENDENCIES
   byebug
   clockwork
   codecov
-  curb
   derailed
   groupdate
   haml-rails

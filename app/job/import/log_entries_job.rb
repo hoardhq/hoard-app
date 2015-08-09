@@ -1,7 +1,6 @@
 class Import::LogEntriesJob < ActiveJob::Base
 
   def perform(importer)
-    require 'curb'
     hour_step = 2
     date = DateTime.now
     date_final = date - importer.schedule.seconds
@@ -16,16 +15,20 @@ class Import::LogEntriesJob < ActiveJob::Base
         hour -= hour_step
         next if hour_start > DateTime.now
         print "  #{hour_start} to #{hour_end}"
-        uri = importer.endpoint.gsub('{date:start}', (hour_start.to_i * 1000).to_s).gsub('{date:end}', (hour_end.to_i * 1000).to_s)
-        http = Curl.get uri
-        if http.body_str.index('{') === 0
-          json = JSON.parse(http.body_str)['']
+        uri_string = importer.endpoint.gsub('{date:start}', (hour_start.to_i * 1000).to_s).gsub('{date:end}', (hour_end.to_i * 1000).to_s)
+        uri = URI.parse(uri_string)
+        response = Net::HTTP.start(uri.host, uri.port) do |http|
+          request = Net::HTTP::Get.new uri
+          http.request request
+        end
+        if response.body.index('{') === 0
+          json = JSON.parse(response.body)['']
           if json['response'] == 'error'
             puts "  ERROR: #{json['reason']}"
             next
           end
         end
-        lines = http.body_str.split("\n")
+        lines = response.body.split("\n")
         event_count = 0
         print "  #{lines.count.to_s.ljust 6}"
         uuids = {}

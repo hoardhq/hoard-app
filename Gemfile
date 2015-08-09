@@ -12,8 +12,6 @@ gem 'puma'
 gem 'sass-rails'
 gem 'sidekiq'
 
-gem 'curb', require: false
-
 group :development do
   gem 'byebug'
   gem 'derailed'
