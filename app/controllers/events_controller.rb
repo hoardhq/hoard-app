@@ -4,26 +4,14 @@ class EventsController < ApplicationController
   skip_before_action :authenticate_user!, only: :create
 
   before_action :authenticate_api_key!, only: :create
-  around_action :track_results, only: :index
 
   def index
     time_start = Time.now
     @stream = Stream.find_by(slug: params[:stream])
     @fields = ActiveRecord::Base.connection.execute("SELECT DISTINCT field FROM (SELECT jsonb_object_keys(data) AS field FROM events) AS subquery").map { |row| row['field'] }
     if @stream.present?
-      @events = Event.all
+      @events = Event.filter_by_hql(params[:hql]) || Event.all
       @events = @events.where(stream_id: @stream.id) if @stream.present?
-      if params[:hql].present?
-        @hql_query = HQL::Query.new params[:hql]
-        @hql_query_record = Query.find_by(uuid: @hql_query.uuid)
-        if @hql_query_record.blank?
-          @hql_query_record = Query.create(
-            uuid: @hql_query.uuid,
-            raw: @hql_query.canonical,
-          )
-        end
-        @events = @events.where(@hql_query.to_sql) if @hql_query.valid?
-      end
       @events = @events.order(created_at: :desc).limit(params[:limit].presence || 25).offset(params[:offset].presence || 0)
       if params[:aggregate] && params[:aggregate][:function].present?
         @events = @events.except(:order, :limit, :offset).group_by_hour(:created_at, range: 7.days.ago..Time.now)
@@ -44,15 +32,5 @@ class EventsController < ApplicationController
 
   private
 
-  def track_results
-    time_start = Time.now
-    yield
-    if @hql_query
-      @hql_query_record.query_results.create(
-        elapsed: ((Time.now - time_start) * 1000000),
-        count: @events.except(:limit, :offset, :order).count,
-        stream_id: @stream.try(:id),
-      )
     end
-  end
 end
