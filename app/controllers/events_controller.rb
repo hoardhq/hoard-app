@@ -5,6 +5,8 @@ class EventsController < ApplicationController
 
   before_action :authenticate_api_key!, only: :create
 
+  helper_method :events_for_graphing
+
   def index
     time_start = Time.now
     @stream = Stream.find_by(slug: params[:stream])
@@ -14,8 +16,14 @@ class EventsController < ApplicationController
       @events = @events.where(stream_id: @stream.id) if @stream.present?
       @events = @events.order(created_at: :desc).limit(params[:limit].presence || 25).offset(params[:offset].presence || 0)
       if params[:aggregate] && params[:aggregate][:function].present?
-        @events = @events.except(:order, :limit, :offset).group_by_hour(:created_at, range: 7.days.ago..Time.now)
-        @events = @events.calculate(params[:aggregate][:function], params[:aggregate][:field].present? ? "(data->>'#{params[:aggregate][:field]}')::integer" : :all)
+        if params[:aggregate][:group] && params[:aggregate][:group] != '$time'
+          @events = @events.except(:order, :limit, :offset).group("data->>'#{params[:aggregate][:group]}'")
+        else
+          @events = @events.except(:order, :limit, :offset).group_by_hour(:created_at, range: 7.days.ago..Time.now)
+        end
+        field_definition = params[:aggregate][:field].present? ? "(data->>'#{params[:aggregate][:field]}')::integer" : 'id'
+        @events = @events.order("#{params[:aggregate][:function].gsub('average', 'avg').upcase}(#{field_definition}) DESC")
+        @events = @events.calculate(params[:aggregate][:function], field_definition)
       end
     end
     @elapsed = Time.now - time_start
@@ -32,5 +40,14 @@ class EventsController < ApplicationController
 
   private
 
+  def events_for_graphing
+    events = Event.filter_by_hql(params[:hql]) || Event.all
+    events = events.where(stream: @stream.id) if @stream.present?
+    events = events.group_by_hour(:created_at, range: 7.days.ago..Time.now)
+    if params[:aggregate] && params[:aggregate][:function].present? && params[:aggregate][:function] != 'count'
+      events.calculate(params[:aggregate][:function], "(data->>'#{params[:aggregate][:field]}')::integer")
+    else
+      events.count
     end
+  end
 end
