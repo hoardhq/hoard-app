@@ -3,7 +3,7 @@ class RunImportersJob < ActiveJob::Base
   include ActionView::Helpers::DateHelper
 
   def perform
-    Importer.where(active: true).each do |importer|
+    Importer.includes(:stream).where(active: true).each do |importer|
       print "##{importer.id.to_s.ljust 8}"
       print "#{importer.provider} > #{importer.stream.slug}".ljust 48
       if should_run? importer
