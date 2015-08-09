@@ -2,10 +2,11 @@ FROM ruby:2.2.2-slim
 MAINTAINER Marc Qualie <marc@marcqualie.com>
 
 RUN apt-get update \
- && apt-get install -y build-essential libpq-dev libxml2-dev nodejs
-RUN gem update --system \
- && gem update \
- && gem install bcrypt \
+ && apt-get upgrade -y \
+ && apt-get install -y build-essential libpq-dev libxml2-dev nodejs \
+ && gem update --system \
+ && gem install --update-sources --bulk-threshold 250 --no-document \
+    bcrypt \
     clockwork codecov \
     derailed \
     groupdate \
@@ -15,7 +16,10 @@ RUN gem update --system \
     pg puma \
     rails rails_12factor \
     sass-rails sidekiq \
-    uglifier
+    uglifier \
+ && apt-get clean \
+ && apt-get -y autoremove \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV RAILS_ENV production
 WORKDIR /app
