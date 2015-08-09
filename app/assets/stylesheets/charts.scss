@@ -1,3 +1,15 @@
+.dashboard-stream-chart {
+  @include box-shadow(inset 0px 0px 5px #999);
+  background: #f7f7f7;
+  height: 150px;
+  .notice {
+    height: 150px;
+    line-height: 150px;
+    text-align: center;
+  }
+}
+
+
 #chart-event-trend {
   @include box-shadow(inset 0px 0px 5px #999);
   background: #f7f7f7;
@@ -13,10 +25,32 @@
     border: none;
   }
 
+
   .axis path, .axis line {
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
+  }
+
+  .axis.y {
+    .tick {
+      text {
+        stroke: $brand-primary;
+        text-align: center;
+        text-shadow:
+          -1px -1px 0 #fff,
+          -1px 1px 0 #fff,
+          1px -1px 0 #fff,
+          1px 1px 0 #fff
+          ;
+      }
+      line {
+        stroke: #e5e5e5;
+      }
+    }
+    .domain {
+      stroke: none;
+    }
   }
 
   .area { fill: $brand-primary; }

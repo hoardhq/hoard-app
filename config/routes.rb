@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  root "streams#index"
+  root "dashboard#index"
 
   resources :api_keys, only: [:create, :destroy]
   resources :events, only: [:index, :create]

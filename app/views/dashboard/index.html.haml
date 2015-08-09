@@ -1,0 +1,37 @@
+%br
+.container-fluid
+  .row
+    - @streams.each do |stream|
+      .col-md-4
+        .panel.panel-default
+          .panel-heading
+            %h4.panel-title
+              = link_to stream_path(stream) do
+                = stream.name
+          .dashboard-stream-chart
+            .chart{id: "stream-chart-#{stream.id}"}
+            - if stream.events.count > 0
+              :javascript
+                $(document).on('ready', function () {
+                  Hoard.renderAreaChart(
+                    '#stream-chart-#{stream.id}',
+                    #{stream.events.except(:order, :limit, :offset).group_by_hour(:created_at, range: 24.hours.ago..Time.now).count.to_json},
+                    {
+                      xAxis: 'off',
+                    }
+                  );
+                });
+            - else
+              .notice.text-muted
+                No data in the last 24 hours
+
+          .panel-footer.clearfix
+            .pull-left
+              = link_to events_path(stream: stream.slug) do
+                = number_with_delimiter stream.events.count
+                events
+            - if stream.importers.count > 0
+              .pull-right
+                = link_to importers_path(stream: stream.slug) do
+                  %span.fa.fa-cloud-download
+                  = stream.importers.count
