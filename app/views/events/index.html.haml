@@ -3,16 +3,16 @@
   .row
     .col-sm-2
       = select_tag :stream, options_from_collection_for_select(Stream.all, 'slug', 'name', @stream.try(:slug)), include_blank: '-- Stream --', class: 'form-control', onchange: "$(this).closest('form').submit();"
+    .col-sm-1
+      = select_tag 'aggregate[function]', options_for_select({'COUNT' => 'count', 'AVERAGE' => 'average', 'SUM' => 'sum'}, params[:aggregate].try(:[], :function)), include_blank: '-- Aggregate Function --', class: 'form-control'
+    .col-sm-1
+      = select_tag 'aggregate[field]', options_for_select(@fields, params[:aggregate].try(:[], :field)), include_blank: '-- Aggregate Field --', class: 'form-control'
     .col-sm-8
       .input-group{class: "#{(@hql_query.valid? ? 'has-success' : 'has-error') if @hql_query}"}
         = text_field_tag :hql, params[:hql], placeholder: "HQL e.g. agent = 'Mozilla/5.0 (googlebot 1.0)' path ~ /settings", class: 'form-control', autocomplete: 'off'
         .input-group-btn
           = button_tag type: 'submit', class: 'btn btn-block btn-primary', name: nil do
             %span.fa.fa-search
-    .col-sm-1
-      = text_field_tag :offset, params[:offset], placeholder: 'Offset', class: 'form-control text-center'
-    .col-sm-1
-      = text_field_tag :limit, params[:limit], placeholder: 'Limit', class: 'form-control text-center'
     .col-sm-1
 
 
@@ -48,29 +48,51 @@
     %hr
     .table-responsive
       %table.table.table-striped
-        %thead
-          %tr
-            %th{width: 100}
-              Time
-            - @columns.each do |column|
-              %th.text-center
-                = column
-        %tbody
-          - @events.each do |event|
+        - if params[:aggregate] && params[:aggregate][:function].present?
+          %thead
             %tr
-              %td.text-right
-                %small.text-muted
-                  = event.created_at.strftime('%Y-%m-%d %H:%M')
-              - @columns.each do |column|
-                %td.text-center
-                  - if event.data[column]
-                    = event.data[column]
-                  - else
-                    %span.text-muted
-                      \-
+              %th{width: 100}
+                Key
+              %th
+                Value
+          %tbody
+            - @events.each do |key, value|
+              %tr
+                %td
+                  = key
+                %td
+                  = value
+        - else
+          %thead
+            %tr
+              %th{width: 100}
+                Time
+              - @fields.each do |column|
+                %th.text-center
+                  = column
+          %tbody
+            - @events.each do |event|
+              %tr
+                %td.text-right
+                  %small.text-muted
+                    = event.created_at.strftime('%Y-%m-%d %H:%M')
+                - @fields.each do |column|
+                  %td.text-center
+                    - if event.data[column]
+                      = event.data[column]
+                    - else
+                      %span.text-muted
+                        \-
 
 - if @events.present?
-  :javascript
-    $(document).on('ready', function () {
-      Hoard.renderAreaChart('#chart-event-trend', #{@events.except(:order, :limit, :offset).group_by_hour(:created_at, range: 7.days.ago..DateTime.now).count.to_json});
-    });
+  - if params[:aggregate] && params[:aggregate][:function].present?
+    :javascript
+      $(document).on('ready', function () {
+        Hoard.renderAreaChart('#chart-event-trend', #{@events.to_json});
+      });
+  - else
+    :javascript
+      $(document).on('ready', function () {
+        Hoard.renderAreaChart('#chart-event-trend', #{@events.except(:order, :limit, :offset).group_by_hour(:created_at, range: 7.days.ago..DateTime.now).count.to_json});
+      });
+

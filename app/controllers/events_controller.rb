@@ -9,6 +9,7 @@ class EventsController < ApplicationController
   def index
     time_start = Time.now
     @stream = Stream.find_by(slug: params[:stream])
+    @fields = ActiveRecord::Base.connection.execute("SELECT DISTINCT field FROM (SELECT jsonb_object_keys(data) AS field FROM events) AS subquery").map { |row| row['field'] }
     if @stream.present?
       @events = Event.all
       @events = @events.where(stream_id: @stream.id) if @stream.present?
@@ -24,7 +25,10 @@ class EventsController < ApplicationController
         @events = @events.where(@hql_query.to_sql) if @hql_query.valid?
       end
       @events = @events.order(created_at: :desc).limit(params[:limit].presence || 25).offset(params[:offset].presence || 0)
-      @columns = @events.map { |row| row.data.keys }.flatten.uniq.sort
+      if params[:aggregate] && params[:aggregate][:function].present?
+        @events = @events.except(:order, :limit, :offset).group_by_hour(:created_at, range: 7.days.ago..Time.now)
+        @events = @events.calculate(params[:aggregate][:function], params[:aggregate][:field].present? ? "(data->>'#{params[:aggregate][:field]}')::integer" : :all)
+      end
     end
     @elapsed = Time.now - time_start
   end
