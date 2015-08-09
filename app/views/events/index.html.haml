@@ -58,7 +58,7 @@
               %th
                 Value
           %tbody
-            - @events.each do |key, value|
+            - @events.first(params[:limit] ? params[:limit] : 100).each do |key, value|
               %tr
                 %td
                   = key
