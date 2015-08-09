@@ -30,12 +30,8 @@ class EventsController < ApplicationController
   end
 
   def create
-    payloads = JSON.parse request.raw_post
-    payloads = [payloads] unless payloads.is_a? Array
-    events = payloads.map do |payload|
-      Event.create(data: payload)
-    end
-    render json: events.to_json, status: 201
+    context = ConvertPayloadToEvents.call(payload: request.raw_post)
+    render json: context.events.to_json, status: 201
   end
 
   private
