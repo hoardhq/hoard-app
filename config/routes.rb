@@ -9,10 +9,6 @@ Rails.application.routes.draw do
       get 'run'
     end
   end
-  resources :queries, only: [:index]
-  resources :reports, only: [:new, :create, :index, :show] do
-    resources :report_results, only: [:new, :show], path: 'results', as: :result
-  end
   resources :sessions, only: [:new, :create, :destroy]
   resources :streams, only: [:index, :show]
 

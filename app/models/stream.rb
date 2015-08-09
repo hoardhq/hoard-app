@@ -5,8 +5,6 @@ class Stream < ActiveRecord::Base
 
   has_many :events
   has_many :importers
-  has_many :query_results
-  has_many :queries, through: :query_results
 
   def to_param
     slug

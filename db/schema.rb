@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150807171852) do
+ActiveRecord::Schema.define(version: 20150809205813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,44 +40,6 @@ ActiveRecord::Schema.define(version: 20150807171852) do
     t.string  "provider"
     t.string  "endpoint"
     t.integer "schedule"
-  end
-
-  create_table "queries", force: :cascade do |t|
-    t.string   "uuid"
-    t.string   "raw"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "queries", ["uuid"], name: "index_queries_on_uuid", unique: true, using: :btree
-
-  create_table "query_results", force: :cascade do |t|
-    t.integer  "query_id"
-    t.integer  "count"
-    t.integer  "elapsed"
-    t.integer  "stream_id"
-    t.datetime "created_at", null: false
-  end
-
-  create_table "report_results", force: :cascade do |t|
-    t.integer  "report_id"
-    t.string   "status",     default: "queued"
-    t.jsonb    "results"
-    t.integer  "elapsed"
-    t.integer  "count"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-  end
-
-  create_table "reports", force: :cascade do |t|
-    t.integer  "stream_id"
-    t.string   "name",       limit: 50
-    t.string   "filter"
-    t.string   "group"
-    t.string   "function"
-    t.string   "schedules",             default: [],              array: true
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
   end
 
   create_table "streams", force: :cascade do |t|
