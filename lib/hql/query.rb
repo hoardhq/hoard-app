@@ -3,7 +3,7 @@ module HQL
   class Query
 
     def initialize(query_string)
-      @query_string = query_string
+      @query_string = query_string || ""
       @pairs = {}
     end
 
