@@ -4,6 +4,7 @@ class SystemController < ApplicationController
     @system_info = {
       environment: Rails.env,
       ruby_version: RUBY_VERSION,
+      rails_version: Rails.version,
       hostname: `hostname`,
       server_time: `date`,
     }
