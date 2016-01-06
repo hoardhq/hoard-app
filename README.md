@@ -19,7 +19,7 @@ Make sure to have a **.env** file similar to the following:
 
 ```
 RAILS_ENV=development
-PORT=8090
+PUMA_BIND=unix:/var/run/project-sockets/hoardhq-hoard-app
 DATABASE_URL=postgresql://hoard:hoard@$DOCKER_HOST/hoard-development
 ```
 
