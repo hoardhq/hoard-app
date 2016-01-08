@@ -32,6 +32,11 @@ make run
 You can attach to the running instance using `make attach` which will allow you use the rails console to create and manage your development database.
 
 
+### Default User Login
+
+The default user can be accessed via **user@example.com** with password **password**. New users can be added directly via the Rails console via the `User` model.
+
+
 ### User docker-compose
 
 ```
